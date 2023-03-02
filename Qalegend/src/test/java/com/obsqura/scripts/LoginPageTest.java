@@ -1,24 +1,30 @@
 package com.obsqura.scripts;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-
-import com.obsqura.pages.HomePage;
 import com.obsqura.pages.LoginPage;
 import com.obsqura.utlities.ExcelUtility;
 
-import org.testng.Assert;
+public class LoginPageTest extends TestHelper {
+	LoginPage loginpge;
+	ExcelUtility test;
 
+	@Test(priority=1,enabled=true,groups= {"Smoke"})
+ public void invalidUserNameLogin()
+ {
+		loginpge = new LoginPage(driver);
+		loginpge.userLogin("admi", "123456");
+		
+		
+		
+ }
 
-public class LoginPageTest extends TestHelper
-{
- 
-
-	   @Test(groups="smoke")
-		public void validQaLegendLogin() {
-			LoginPage loginpge = new LoginPage(driver);
+	@Test(priority=2,enabled=true,groups= {"Smoke"})
+		public void validLogin() {
+		    
 			loginpge.userLogin("admin", "123456");
-			ExcelUtility test = new ExcelUtility();
+		    test = new ExcelUtility();
 			test.selectExcelFile("LoginData", "ValidDataa");
 			test.getCellData(0, 0);
 			
@@ -26,19 +32,16 @@ public class LoginPageTest extends TestHelper
 			
 		
 	  }
+
 }
 
-	  
-	/*  @Test
-	  public void invalidLogin()
-	  {
-		  LoginPage loggedin=new LoginPage(driver);
-			loggedin.userLogin("admi","1456");
-	  
-		//HomePage homePage=new HomePage(driver);
-		// Assert.assertTrue(homePage.isHomePageLoaded());
-	    
-	  
-	  
-*/
-	  
+/*
+ * @Test public void invalidLogin() { LoginPage loggedin=new LoginPage(driver);
+ * loggedin.userLogin("admi","1456");
+ * 
+ * //HomePage homePage=new HomePage(driver); //
+ * Assert.assertTrue(homePage.isHomePageLoaded());
+ * 
+ * 
+ * 
+ */

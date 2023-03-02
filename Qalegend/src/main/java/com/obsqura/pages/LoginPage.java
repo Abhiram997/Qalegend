@@ -43,6 +43,7 @@ public class LoginPage
 			
 		
 		}
+		
 		public String getTitleMsg() {
 			String titMsg = actualTitle.getText();
 			System.out.println(titMsg);
