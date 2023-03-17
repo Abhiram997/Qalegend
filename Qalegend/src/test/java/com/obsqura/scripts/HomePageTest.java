@@ -8,27 +8,40 @@ import com.obsqura.pages.LoginPage;
 import com.obsqura.utlities.ExcelUtility;
 
 public class HomePageTest extends TestHelper {
-/*	@Test
-	public void homePageQalegend() {
-		
-		
-		
-		ExcelUtility test = new ExcelUtility();
-		test.setExcelFile("LoginData", "ValidDataa");
-		test.getCellData(0, 0);
-		System.out.println(test.getCellData(0, 0));
-		HomePage home = new HomePage(driver);
-		home.homePage();
-	}*/
+	LoginPage loginpge;
+	HomePage homepage = new HomePage(driver);
+
 	
-	@Test(groups={"regression","smoke"})
-	public void checkHomePageLoaded()
-	{
-		LoginPage loginpge = new LoginPage(driver);
+
+	@Test(priority = 5, groups = { "regression", "smoke" })
+	public void checkHomePageLoaded() {
+		loginpge = new LoginPage(driver);
 		loginpge.userLogin("admin", "123456");
-		HomePage homepage=new HomePage(driver);
+		loginpge.endTour();
+		homepage = new HomePage(driver);
 		homepage.isHomePageLoaded();
-		
+
 		Assert.assertTrue(homepage.isHomePageLoaded(), "Home page not loaded");
+	}
+
+	@Test(priority = 6)
+	public void profileTitleTest() {
+	    String expectedtitle = "Home - las";
+		String actualtitle = driver.getTitle();
+		Assert.assertEquals(actualtitle, expectedtitle);
+		System.out.println("After hard assertion " + " Title is same");
+	}
+
+	@Test(priority = 7)
+	public void welcomeNoteTest() {
+		homepage = new HomePage(driver);
+		boolean status = homepage.welcomenote.isDisplayed();
+		if (status) {
+			Assert.assertTrue(true);
+
+		} else {
+			Assert.assertTrue(false);
+		}
+
 	}
 }

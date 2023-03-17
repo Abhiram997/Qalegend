@@ -1,49 +1,87 @@
 package com.obsqura.scripts;
 
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.obsqura.pages.ContactsPage;
 import com.obsqura.pages.LoginPage;
 import com.obsqura.utlities.ExcelUtility;
+import com.obsqura.utlities.PageUtility;
 
 public class ContactsPageTest extends TestHelper {
 	LoginPage loginpge;
 	ContactsPage contactspage;
 	ExcelUtility excelutility = new ExcelUtility();
+	PageUtility pageutility;
+	
 
-	@Test
-	public void verifyNewSupplierCreation() {
-		loginpge = new LoginPage(driver);
-		loginpge.userLogin("admin", "123456");
-		contactspage = new ContactsPage(driver);
-		excelutility.selectExcelFile("ContactsSuppliers", "Contactdata");
-		contactspage.clickContactsPage();
-		contactspage.clickOnsuppliers();
-		contactspage.clickOnAdd();
-		contactspage.selectContactType();
-		String name = excelutility.getCellData(0, 0);
-		String businessname =excelutility.getCellData(0, 1);
-		String contactid =excelutility.getCellData(0, 2);
-		String taxnumber =excelutility.getCellData(0, 3);
-		String openingbalance =excelutility.getCellData(0, 4);
-		String payterm =excelutility.getCellData(0, 5);
-		contactspage.selectPayterm();
-		contactspage.selectCustomerGroup();
-	    String creditlimit =excelutility.getCellData(0, 6);
-		String email =excelutility.getCellData(0, 7);
-		String mobile =excelutility.getCellData(0, 8);
-		String alternatecontactnumber =excelutility.getCellData(0, 9);
-		String landline =excelutility.getCellData(0, 10);
-		String city =excelutility.getCellData(0, 11);
-		String state =excelutility.getCellData(0, 12);
-		String country =excelutility.getCellData(0, 13);
-		String landmark =excelutility.getCellData(0, 14);
-		String customfield1 =excelutility.getCellData(0, 15);
-		String customfield2 =excelutility.getCellData(0, 16);
-		String customfield3 =excelutility.getCellData(0, 17);
-		String customfield4 =excelutility.getCellData(0, 18);
-		contactspage.createContact(name, businessname, contactid, taxnumber, openingbalance, payterm, creditlimit, email, mobile, alternatecontactnumber, landline, city, state, country, landmark, customfield1, customfield2, customfield3, customfield4);
-				
-		
+	@Test(priority = 22, dataProvider = "SupplierDataWithoutMandatoryField")
+	public void isSupplierAddedWithoutFillingOneMandatoryField(String name, String businessname, String mobilenumber) {
+	LoginPage loginpage = new LoginPage(driver);
+	loginpage.userLogin("admin", "123456");
+	loginpage.endTour();
+	contactspage = new ContactsPage(driver);
+	contactspage.clickOnContacts();
+	contactspage.clickOnsuppliers();
+	contactspage.addSupplierWithoutFillingOneMandatoryField(name, businessname, mobilenumber);
+	if (contactspage.validationforMandatoryField.isDisplayed()) {
+	Assert.assertTrue(true);
+	System.out.println("Supplier cannot be added without filling mandatory field");
+	} else {
+	Assert.assertTrue(false);
+	System.out.println("Supplier can be added without filling mandatory field");
+	}
+	}
+
+	@Test(priority = 23,dataProvider = "SupplierDataWithOnlyMandatoryField")
+	public void isSupplierAddedByFillingOnlyMandatoryField(String name, String businessname, String mobilenumber) {
+	pageutility = new PageUtility();
+	pageutility.refreshUtility(driver);
+	contactspage.clickOnsuppliers();
+
+	contactspage.addSupplierWithoutFillingOneMandatoryField(name, businessname, mobilenumber);
+
+	if (contactspage.successmessge.isDisplayed()) {
+	Assert.assertTrue(true);
+	System.out.println("Supplier can be added by only filling mandatory field");
+	} else {
+	Assert.assertTrue(false);
+	System.out.println("Supplier cannot be added by only filling mandatory field");
+	}
+	}
+
+	@DataProvider(name = "SupplierDataWithoutMandatoryField")
+	public Object[][] getDataFromDataprovider() {
+
+	Object[][] data = { { "Abhiram", "ABCD", "" } };
+	return data;
+	}
+
+	@DataProvider(name = "SupplierDataWithOnlyMandatoryField")
+	public Object[][] getDataFromDatasprovider() {
+
+	Object[][] data = { { "Abhiram", "ABCD", "12345678910" } };
+	return data;
+	}
+
+	// importcontacts
+
+
+
+	@Test(priority = 24, groups = {"regression" })
+	public void importContacts()
+	{
+	contactspage.clickOnImportContacts();
+	String path="C:\\Users\\ABHIRAM\\git\\Qalegend\\Qalegend\\src\\main\\resources\\ExcelFiles\\UserManagment.xlsx";
+	contactspage.importContact(path);
+
+	if (contactspage.fileimportsuccessmessge.isDisplayed()) {
+	Assert.assertTrue(true);
+	System.out.println("File imported successfully");
+	} else {
+	Assert.assertTrue(false);
+	System.out.println("File not imported successfully");
+	}
 	}
 }

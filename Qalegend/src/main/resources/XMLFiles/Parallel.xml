@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="parallel suite" thread-count="2" parallel="tests">
+	<listeners>
+		<listener class-name="com.obsqura.listeners.ExtendReporter"></listener>
+	</listeners>
+	<test name="smokerun">
+	<classes>
+		<class name="com.obsqura.scripts.LoginPageTest" />
+			<class name="com.obsqura.scripts.HomePageTest" />
+		
+			
+	</classes>		
+	</test>
+	<test name="regrassion">
+	<classes>
+		    <class name="com.obsqura.scripts.LoginPageTest" />
+			<class name="com.obsqura.scripts.HomePageTest" />
+		
+	</classes>		
+	</test>
+	
+</suite>

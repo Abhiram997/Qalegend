@@ -9,8 +9,8 @@ public class HomePage
 {
 	WebDriver driver;
 	
-	@FindBy(xpath = "//span[text()='vishwanadhan Aanadh'] ")
-	WebElement ProfileName;
+	@FindBy(xpath = "//section[contains(@class,'content-header')]/h1")
+	public WebElement welcomenote;
 	
 
  public HomePage(WebDriver driver)
@@ -20,14 +20,14 @@ public class HomePage
  }
   public void homePage()
   {
-	 String name=ProfileName.getText();
+	 String name=welcomenote.getText();
 	 System.out.println(name);
   }
  
 	
 public boolean isHomePageLoaded()
 {
-	return ProfileName.isDisplayed();
+	return welcomenote.isDisplayed();
 }
 
 }
